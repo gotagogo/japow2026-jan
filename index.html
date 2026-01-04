@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 Jan Japow Trip</title>
+    <title>25-26 Hakuba Snow Trip</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -260,30 +260,17 @@
                 };
 
                 const scheduleData = ref([
-                    { date: 'Day1 01/23', events: [flightInfo.dep, { name: '諏訪湖服務區', travelTime: '180', desc: '中途休息點。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=諏訪湖SA' }, { name: '民宿 雪ノ音', travelTime: '90', mapUrl: 'https://maps.app.goo.gl/py6VT2N79M1vUAjx5' }] },
-                    { date: 'Day2 01/24', events: [{ name: '栂池高原滑雪場', desc: '寬闊雪道-鐘鳴之丘。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=栂池高原滑雪場', pdf: '栂池高原 Tsugaike.pdf' }] },
-                    { date: 'Day3 01/25', events: [{ name: '岩岳滑雪場', desc: '以360度無死角展望著稱，擁有全日本最美的露台。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=岩岳滑雪場', pdf: '岩岳 Iwatake.pdf' }] },
-                    { date: 'Day4 01/26', events: [{ name: '八方尾根滑雪場', desc: '冬奧會場，白馬最具挑戰性、垂直落差最大的雪場之一。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=八方尾根滑雪場', pdf: '八方尾根 Happo-One.pdf' }] },
-                    { date: 'Day5 01/27', events: [{ name: '八方尾根滑雪場', desc: '挑戰高級賽道，留意跨年活動或煙火。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=八方尾根滑雪場', pdf: '八方尾根 Happo-One.pdf' }] },
-                    { date: 'Day6 01/28', events: [{ name: '戶隱神社', travelTime: '60', desc: '壯觀巨木林道，新年參拜。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=戶隱神社' }] },
-                    { date: 'Day7 01/29', events: [{ name: '白馬 Cortina', desc: '粉雪天堂，歐風建築。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=白馬Cortina滑雪場', pdf: 'Cortina.pdf' }] },
-                    { date: 'Day8 01/30', events: [{ name: '白馬 Sanosaka', desc: '青木湖美景。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=白馬Sanosaka滑雪場', pdf: 'Sanosaka.pdf' }] },
-                    { date: 'Day9 01/31', events: [{ name: '白馬五竜滑雪場', desc: '高品質公園地形，夜滑場地。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=白馬五竜滑雪場', pdf: '五龍47 Goryu_47.pdf' }] },
-                    { date: 'Day10 02/01', events: [{ name: '松本城', travelTime: '70', desc: '古城巡禮，體驗信州特色美食。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=松本城' }] },
-                    { date: 'Day11 02/02', events: [{ name: '舊輕井澤銀座通', desc: '歐風小鎮稍作休息。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=舊輕井澤銀座通' }, { ...flightInfo.ret, travelTime: '180' }] }
-                    { date: 'Day11 02/03', events: [{ name: '舊輕井澤銀座通', desc: '歐風小鎮稍作休息。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=舊輕井澤銀座通' }, { ...flightInfo.ret, travelTime: '180' }] }
-                    { date: 'Day11 02/04', events: [{ name: '舊輕井澤銀座通', desc: '歐風小鎮稍作休息。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=舊輕井澤銀座通' }, { ...flightInfo.ret, travelTime: '180' }] }
-                    { date: 'Day11 02/05', events: [{ name: '舊輕井澤銀座通', desc: '歐風小鎮稍作休息。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=舊輕井澤銀座通' }, { ...flightInfo.ret, travelTime: '180' }] }
-                    { date: 'Day11 02/06', events: [{ name: '舊輕井澤銀座通', desc: '歐風小鎮稍作休息。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=舊輕井澤銀座通' }, { ...flightInfo.ret, travelTime: '180' }] }
-                    { date: 'Day11 02/07', events: [{ name: '舊輕井澤銀座通', desc: '歐風小鎮稍作休息。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=舊輕井澤銀座通' }, { ...flightInfo.ret, travelTime: '180' }] }
-                    { date: 'Day11 02/08', events: [{ name: '舊輕井澤銀座通', desc: '歐風小鎮稍作休息。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=舊輕井澤銀座通' }, { ...flightInfo.ret, travelTime: '180' }] }
-                    { date: 'Day11 02/09', events: [{ name: '舊輕井澤銀座通', desc: '歐風小鎮稍作休息。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=舊輕井澤銀座通' }, { ...flightInfo.ret, travelTime: '180' }] }
-                    { date: 'Day11 02/10', events: [{ name: '舊輕井澤銀座通', desc: '歐風小鎮稍作休息。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=舊輕井澤銀座通' }, { ...flightInfo.ret, travelTime: '180' }] }
-                    { date: 'Day11 02/11', events: [{ name: '舊輕井澤銀座通', desc: '歐風小鎮稍作休息。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=舊輕井澤銀座通' }, { ...flightInfo.ret, travelTime: '180' }] }
-                    { date: 'Day11 02/12', events: [{ name: '舊輕井澤銀座通', desc: '歐風小鎮稍作休息。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=舊輕井澤銀座通' }, { ...flightInfo.ret, travelTime: '180' }] }
-                    { date: 'Day11 02/13', events: [{ name: '舊輕井澤銀座通', desc: '歐風小鎮稍作休息。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=舊輕井澤銀座通' }, { ...flightInfo.ret, travelTime: '180' }] }
-                    { date: 'Day11 02/14', events: [{ name: '舊輕井澤銀座通', desc: '歐風小鎮稍作休息。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=舊輕井澤銀座通' }, { ...flightInfo.ret, travelTime: '180' }] }
-                    { date: 'Day11 02/15', events: [{ name: '舊輕井澤銀座通', desc: '歐風小鎮稍作休息。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=舊輕井澤銀座通' }, { ...flightInfo.ret, travelTime: '180' }] }
+                    { date: 'Day1 12/27', events: [flightInfo.dep, { name: '諏訪湖服務區', travelTime: '180', desc: '中途休息點。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=諏訪湖SA' }, { name: '民宿 雪ノ音', travelTime: '90', mapUrl: 'https://maps.app.goo.gl/py6VT2N79M1vUAjx5' }] },
+                    { date: 'Day2 12/28', events: [{ name: '栂池高原滑雪場', desc: '寬闊雪道-鐘鳴之丘。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=栂池高原滑雪場', pdf: '栂池高原 Tsugaike.pdf' }] },
+                    { date: 'Day3 12/29', events: [{ name: '岩岳滑雪場', desc: '以360度無死角展望著稱，擁有全日本最美的露台。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=岩岳滑雪場', pdf: '岩岳 Iwatake.pdf' }] },
+                    { date: 'Day4 12/30', events: [{ name: '八方尾根滑雪場', desc: '冬奧會場，白馬最具挑戰性、垂直落差最大的雪場之一。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=八方尾根滑雪場', pdf: '八方尾根 Happo-One.pdf' }] },
+                    { date: 'Day5 12/31', events: [{ name: '八方尾根滑雪場', desc: '挑戰高級賽道，留意跨年活動或煙火。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=八方尾根滑雪場', pdf: '八方尾根 Happo-One.pdf' }] },
+                    { date: 'Day6 01/01', events: [{ name: '戶隱神社', travelTime: '60', desc: '壯觀巨木林道，新年參拜。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=戶隱神社' }] },
+                    { date: 'Day7 01/02', events: [{ name: '白馬 Cortina', desc: '粉雪天堂，歐風建築。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=白馬Cortina滑雪場', pdf: 'Cortina.pdf' }] },
+                    { date: 'Day8 01/03', events: [{ name: '白馬 Sanosaka', desc: '青木湖美景。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=白馬Sanosaka滑雪場', pdf: 'Sanosaka.pdf' }] },
+                    { date: 'Day9 01/04', events: [{ name: '白馬五竜滑雪場', desc: '高品質公園地形，夜滑場地。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=白馬五竜滑雪場', pdf: '五龍47 Goryu_47.pdf' }] },
+                    { date: 'Day10 01/05', events: [{ name: '松本城', travelTime: '70', desc: '古城巡禮，體驗信州特色美食。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=松本城' }] },
+                    { date: 'Day11 01/06', events: [{ name: '舊輕井澤銀座通', desc: '歐風小鎮稍作休息。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=舊輕井澤銀座通' }, { ...flightInfo.ret, travelTime: '180' }] }
                 ]);
 
                 const resortsWithPdf = [
