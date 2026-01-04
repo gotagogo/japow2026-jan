@@ -271,12 +271,12 @@
                 ]);
 
                 const resortsWithPdf = [
-                    { name: '仙台泉滑雪場', pdf: '仙台泉滑雪場.pdf' }, { name: '夏油高原滑雪場', pdf: '夏油高原滑雪場.pdf' }
+                    { name: '仙台泉滑雪場', pdf: '仙台泉滑雪場.pdf' }, { name: '夏油高原滑雪場', pdf: '夏油高原滑雪場.pdf' },{ name: '栗駒滑雪場', pdf: '栗駒滑雪場.pdf' },{ name: 'Onikoube雪場', pdf: 'Onikoube.pdf' },{ name: '黑伏高原滑雪公園', pdf: '黑伏高原滑雪公園.pdf' },{ name: '湯殿山滑雪場', pdf: '湯殿山滑雪場.pdf' },{ name: '藏王溫泉滑雪場', pdf: 'ZAO.pdf' }
                 ];
 
                 const fetchWeather = async () => {
                     try {
-                        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=36.6982&longitude=137.8619&current=temperature_2m,apparent_temperature,weather_code&timezone=Asia%2FTokyo');
+                        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=38.1708&longitude=140.3954&current=temperature_2m,apparent_temperature,weather_code&timezone=Asia%2FTokyo');
                         const data = await res.json();
                         const current = data.current;
                         weather.value.temp = Math.round(current.temperature_2m);
