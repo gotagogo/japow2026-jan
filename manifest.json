@@ -1,0 +1,15 @@
+{
+  "name": "ICON",
+  "short_name": "ICON",
+  "start_url": "/https://dream1285201.github.io/Hakuba-Snow-Trip-25-26//",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
