@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>25-26 Hakuba Snow Trip</title>
+    
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon.jpg">
+    <link rel="icon" href="icon.jpg">
+    <link rel="manifest" href="data:application/manifest+json;base64,ewogICJnameIjogIjI1LTI2IEhha3ViYSBTbm93IFRyaXAiLAogICJzaG9ydF9uYW1lIjogIueahOmmrOa7kembqiIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZTBmMmZlIiwKICAidGhlbWVfY29sb3IiOiAiIzAyODRjNyIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImljb24uanBnIiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9qcGVnIgogICAgfQogIF0KfQ==">
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: linear-gradient(180deg, #e0f2fe 0%, #f8fafc 100%);
+            min-height: 100vh;
+            color: #334155;
+            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior-y: contain;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .content-container {
+            margin-top: -45px;
+            border-top-left-radius: 40px;
+            border-top-right-radius: 40px;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.03);
+        }
+
+        .tab-active {
+            color: #0284c7;
+            background: white;
+            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.15);
+        }
+
+        .flight-card {
+            background: linear-gradient(135deg, #0c4a6e 0%, #0284c7 100%);
+            color: white;
+        }
+
+        .pdf-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: black;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pdf-header {
+            height: 60px;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+        }
+
+        .fade-enter-active, .fade-leave-active { transition: opacity 0.2s; }
+        .fade-enter-from, .fade-leave-to { opacity: 0; }
+    </style>
+</head>
+<body>
+    <div id="app" class="max-w-md mx-auto relative min-h-screen pb-10">
+        
+        <header class="relative w-full h-[250px] overflow-hidden">
+            <img src="HAKUBA.jpg" alt="Hakuba Header" class="w-full h-full object-cover">
+            
+            <div class="absolute bottom-16 right-5 flex space-x-3">
+                <button @click="currentTab = 'schedule'" :class="{'tab-active': currentTab === 'schedule'}" 
+                        class="p-3.5 rounded-full glass-card text-slate-400 transition-all duration-300">
+                    <i data-lucide="calendar"></i>
+                </button>
+                <button @click="currentTab = 'info'" :class="{'tab-active': currentTab === 'info'}" 
+                        class="p-3.5 rounded-full glass-card text-slate-400 transition-all duration-300">
+                    <i data-lucide="info"></i>
+                </button>
+            </div>
+        </header>
+
+        <main class="content-container bg-[#f8fafc] px-5 pt-10 min-h-[70vh]">
+            
+            <div v-if="currentTab === 'schedule'">
+                <div class="flex overflow-x-auto no-scrollbar space-x-5 mb-8 pb-2">
+                    <div v-for="(day, index) in scheduleData" :key="index"
+                         @click="selectedDayIndex = index"
+                         class="flex-shrink-0 text-center cursor-pointer transition-all duration-300"
+                         :class="selectedDayIndex === index ? 'text-sky-600 scale-110' : 'text-slate-400'">
+                        <div class="text-[10px] font-bold opacity-80 uppercase">Day {{index + 1}}</div>
+                        <div class="text-xl font-bold">{{day.date.split(' ')[1]}}</div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div v-for="(item, idx) in currentDay.events" :key="idx">
+                        <div v-if="item.travelTime && item.type !== 'flight'" class="flex items-center justify-center my-5">
+                            <div class="h-[1px] bg-slate-200 flex-grow"></div>
+                            <div class="mx-3 flex items-center space-x-1 text-slate-400 text-[10px] font-bold tracking-widest bg-slate-100 px-3 py-1 rounded-full uppercase">
+                                <i data-lucide="car" class="w-3 h-3"></i>
+                                <span>{{item.travelTime}} min</span>
+                            </div>
+                            <div class="h-[1px] bg-slate-200 flex-grow"></div>
+                        </div>
+
+                        <flight-card v-if="item.type === 'flight'" :flight="item"></flight-card>
+
+                        <div v-else class="glass-card rounded-2xl p-5 shadow-sm border-l-4 border-sky-400">
+                            <div class="flex justify-between items-start mb-3">
+                                <div @click="openNav(item.mapUrl)" class="flex-grow cursor-pointer">
+                                    <h3 class="font-bold text-lg text-slate-800">{{item.name}}</h3>
+                                    <div class="flex items-center text-sky-500 text-[10px] font-bold mt-1 uppercase tracking-wider">
+                                        <i data-lucide="navigation" class="w-3 h-3 mr-1"></i> 點擊導航
+                                    </div>
+                                </div>
+                                <button v-if="item.pdf" @click="openPdfViewer(item.pdf, item.name)" 
+                                        class="bg-sky-50 text-sky-600 p-2.5 rounded-xl flex flex-col items-center">
+                                    <i data-lucide="map" class="w-5 h-5"></i>
+                                    <span class="text-[8px] font-bold mt-1">地圖</span>
+                                </button>
+                            </div>
+                            <p class="text-sm text-slate-500 leading-relaxed">{{item.desc}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div v-if="currentTab === 'info'" class="space-y-8 animate-fade-in">
+                
+                <section>
+                    <h2 class="text-sm font-black text-slate-400 mb-4 tracking-widest uppercase flex items-center">
+                        <span class="w-8 h-[1px] bg-slate-300 mr-2"></span> 即時天氣 (白馬村)
+                    </h2>
+                    <div v-if="weather.loading" class="glass-card rounded-2xl p-8 text-center text-slate-400 text-xs">
+                        載入天氣數據中...
+                    </div>
+                    <div v-else class="glass-card rounded-2xl p-6 flex items-center justify-between border-blue-100 shadow-sm">
+                        <div class="flex items-center">
+                            <div class="bg-sky-100 p-4 rounded-2xl mr-4 shadow-inner">
+                                <i :data-lucide="weather.icon" class="text-sky-600 w-10 h-10"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-slate-400 font-bold mb-1">{{weather.desc}}</div>
+                                <div class="text-4xl font-black text-slate-800 tracking-tighter">{{weather.temp}}°C</div>
+                            </div>
+                        </div>
+                        <div class="text-right border-l border-slate-100 pl-6">
+                            <div class="text-[10px] text-slate-400 font-bold uppercase mb-1">體感溫度</div>
+                            <div class="text-xl font-bold text-sky-500">{{weather.feelsLike}}°C</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-sm font-black text-slate-400 mb-4 tracking-widest uppercase flex items-center">
+                        <span class="w-8 h-[1px] bg-slate-300 mr-2"></span> 住宿資訊
+                    </h2>
+                    <div class="glass-card rounded-2xl p-5 border-l-4 border-sky-400 shadow-sm" @click="openNav('https://maps.app.goo.gl/QCCSYTBMsZ1gu51J7')">
+                        <div class="font-bold text-xl text-slate-800 mb-2">雪ノ音 (雪の音)</div>
+                        <p class="text-sm text-slate-500 mb-3 leading-snug">〒399-9211 長野県北安曇郡白馬村神城1102-1</p>
+                        <div class="flex items-center text-slate-600 text-sm font-medium">
+                            <i data-lucide="phone" class="w-4 h-4 mr-2 text-sky-500"></i> 080-6862-0930
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-sm font-black text-slate-400 mb-4 tracking-widest uppercase flex items-center">
+                        <span class="w-8 h-[1px] bg-slate-300 mr-2"></span> 雪場地圖清單
+                    </h2>
+                    <div class="grid grid-cols-2 gap-3 pb-10">
+                        <div v-for="resort in resortsWithPdf" :key="resort.name" @click="openPdfViewer(resort.pdf, resort.name)"
+                             class="glass-card p-4 rounded-xl flex items-center space-x-3 cursor-pointer">
+                            <i data-lucide="file-text" class="text-sky-500 w-5 h-5"></i>
+                            <span class="text-xs font-bold text-slate-700">{{resort.name}}</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <transition name="fade">
+            <div v-if="pdfViewer.show" class="pdf-overlay">
+                <div class="pdf-header">
+                    <button @click="pdfViewer.show = false" class="mr-4 p-2 bg-white/10 rounded-full">
+                        <i data-lucide="arrow-left" class="w-5 h-5 text-white"></i>
+                    </button>
+                    <span class="font-bold text-sm truncate">{{pdfViewer.title}}</span>
+                </div>
+                <div class="flex-grow relative bg-slate-900">
+                    <iframe :src="pdfViewer.url" class="w-full h-full border-none"></iframe>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+    <script>
+        const { createApp, ref, computed, onMounted, nextTick, watch } = Vue;
+
+        const FlightCard = {
+            props: ['flight'],
+            template: `
+                <div class="flight-card rounded-2xl p-6 shadow-xl relative overflow-hidden mb-4">
+                    <i data-lucide="plane" class="absolute -right-6 -top-6 w-32 h-32 opacity-10"></i>
+                    <div class="flex justify-between items-center mb-6 relative z-10">
+                        <span class="bg-white/20 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">{{flight.label}}</span>
+                        <span class="font-bold text-sm tracking-widest">{{flight.flightNo}}</span>
+                    </div>
+                    <div class="flex justify-between items-center relative z-10">
+                        <div class="text-center flex-1">
+                            <div class="text-3xl font-bold">{{flight.from}}</div>
+                            <div class="text-xs opacity-70 mt-1 font-medium">{{flight.depTime}}</div>
+                        </div>
+                        <div class="flex flex-col items-center flex-1 px-2">
+                            <div class="w-full h-[1px] bg-white/30 relative">
+                                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-sky-500 rounded-full p-1">
+                                    <i data-lucide="chevron-right" class="w-2 h-2 text-white"></i>
+                                </div>
+                            </div>
+                            <div class="text-[10px] opacity-60 mt-1">{{flight.duration}}</div>
+                        </div>
+                        <div class="text-center flex-1">
+                            <div class="text-3xl font-bold">{{flight.to}}</div>
+                            <div class="text-xs opacity-70 mt-1 font-medium">{{flight.arrTime}}</div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            mounted() { lucide.createIcons(); }
+        };
+
+        createApp({
+            components: { 'flight-card': FlightCard },
+            setup() {
+                const currentTab = ref('schedule');
+                const selectedDayIndex = ref(0);
+                const pdfViewer = ref({ show: false, url: '', title: '' });
+                const weather = ref({ loading: true, temp: 0, feelsLike: 0, icon: 'sun', desc: '晴朗' });
+
+                const flightInfo = {
+                    dep: { type: 'flight', label: '去程航班 12/27', from: 'TPE', to: 'NRT', flightNo: 'CI104', depTime: '12:35', arrTime: '16:45', duration: '3h 10m' },
+                    ret: { type: 'flight', label: '回程航班 01/06', from: 'NRT', to: 'TPE', flightNo: 'CI109', depTime: '19:30', arrTime: '22:35', duration: '4h 05m' }
+                };
+
+                const scheduleData = ref([
+                    { date: 'Day1 12/27', events: [flightInfo.dep, { name: '諏訪湖服務區', travelTime: '180', desc: '中途休息點。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=諏訪湖SA' }, { name: '民宿 雪ノ音', travelTime: '90', mapUrl: 'https://maps.app.goo.gl/py6VT2N79M1vUAjx5' }] },
+                    { date: 'Day2 12/28', events: [{ name: '栂池高原滑雪場', desc: '寬闊雪道-鐘鳴之丘。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=栂池高原滑雪場', pdf: '栂池高原 Tsugaike.pdf' }] },
+                    { date: 'Day3 12/29', events: [{ name: '岩岳滑雪場', desc: '以360度無死角展望著稱，擁有全日本最美的露台。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=岩岳滑雪場', pdf: '岩岳 Iwatake.pdf' }] },
+                    { date: 'Day4 12/30', events: [{ name: '八方尾根滑雪場', desc: '冬奧會場，白馬最具挑戰性、垂直落差最大的雪場之一。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=八方尾根滑雪場', pdf: '八方尾根 Happo-One.pdf' }] },
+                    { date: 'Day5 12/31', events: [{ name: '八方尾根滑雪場', desc: '挑戰高級賽道，留意跨年活動或煙火。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=八方尾根滑雪場', pdf: '八方尾根 Happo-One.pdf' }] },
+                    { date: 'Day6 01/01', events: [{ name: '戶隱神社', travelTime: '60', desc: '壯觀巨木林道，新年參拜。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=戶隱神社' }] },
+                    { date: 'Day7 01/02', events: [{ name: '白馬 Cortina', desc: '粉雪天堂，歐風建築。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=白馬Cortina滑雪場', pdf: 'Cortina.pdf' }] },
+                    { date: 'Day8 01/03', events: [{ name: '白馬 Sanosaka', desc: '青木湖美景。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=白馬Sanosaka滑雪場', pdf: 'Sanosaka.pdf' }] },
+                    { date: 'Day9 01/04', events: [{ name: '白馬五竜滑雪場', desc: '高品質公園地形，夜滑場地。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=白馬五竜滑雪場', pdf: '五龍47 Goryu_47.pdf' }] },
+                    { date: 'Day10 01/05', events: [{ name: '松本城', travelTime: '70', desc: '古城巡禮，體驗信州特色美食。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=松本城' }] },
+                    { date: 'Day11 01/06', events: [{ name: '舊輕井澤銀座通', desc: '歐風小鎮稍作休息。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=舊輕井澤銀座通' }, { ...flightInfo.ret, travelTime: '180' }] }
+                ]);
+
+                const resortsWithPdf = [
+                    { name: '栂池高原', pdf: '栂池高原 Tsugaike.pdf' }, { name: '岩岳', pdf: '岩岳 Iwatake.pdf' }, { name: '八方尾根', pdf: '八方尾根 Happo-One.pdf' }, { name: 'Cortina', pdf: 'Cortina.pdf' }, { name: 'Sanosaka', pdf: 'Sanosaka.pdf' }, { name: '白馬五龍', pdf: '五龍47 Goryu_47.pdf' }
+                ];
+
+                const fetchWeather = async () => {
+                    try {
+                        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=36.6982&longitude=137.8619&current=temperature_2m,apparent_temperature,weather_code&timezone=Asia%2FTokyo');
+                        const data = await res.json();
+                        const current = data.current;
+                        weather.value.temp = Math.round(current.temperature_2m);
+                        weather.value.feelsLike = Math.round(current.apparent_temperature);
+                        
+                        // 轉換天氣代碼為 Lucide 圖示
+                        const code = current.weather_code;
+                        if (code >= 71) { weather.value.icon = 'cloud-snow'; weather.value.desc = '正在下雪'; }
+                        else if (code >= 51) { weather.value.icon = 'cloud-rain'; weather.value.desc = '正在下雨'; }
+                        else if (code >= 1) { weather.value.icon = 'cloud'; weather.value.desc = '多雲'; }
+                        else { weather.value.icon = 'sun'; weather.value.desc = '晴朗'; }
+                        
+                        weather.value.loading = false;
+                        nextTick(() => lucide.createIcons());
+                    } catch (e) {
+                        weather.value.desc = '數據讀取失敗';
+                        weather.value.loading = false;
+                    }
+                };
+
+                const currentDay = computed(() => scheduleData.value[selectedDayIndex.value]);
+                const openNav = (url) => { if (url) window.location.href = url; };
+                const openPdfViewer = (pdf, title) => {
+                    pdfViewer.value = { show: true, url: pdf, title: title };
+                    nextTick(() => lucide.createIcons());
+                };
+
+                onMounted(() => { 
+                    lucide.createIcons();
+                    fetchWeather();
+                });
+
+                watch([currentTab, selectedDayIndex], () => {
+                    nextTick(() => lucide.createIcons());
+                });
+
+                return { currentTab, selectedDayIndex, scheduleData, currentDay, openNav, openPdfViewer, resortsWithPdf, weather, pdfViewer };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
+
