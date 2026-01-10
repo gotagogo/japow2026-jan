@@ -122,8 +122,14 @@
 
                         <flight-card v-if="item.type === 'flight'" :flight="item"></flight-card>
 
-                        
-                        <div v-else :class="['rounded-2xl p-5 shadow-sm border-l-4',item.name === '夏油高原滑雪場' ? 'bg-green-50 border-green-400' : 'glass-card border-sky-400' ]">
+                        <div
+                          v-else
+                          :class="[
+                            'rounded-2xl p-5 shadow-sm border-l-4',
+                            greenResorts.includes(item.name)
+                              ? 'bg-green-50 border-green-400'
+                              : 'glass-card border-sky-400'
+                          ]">
                             <div class="flex justify-between items-start mb-3">
                                 <div @click="openNav(item.mapUrl)" class="flex-grow cursor-pointer">
                                     <h3 class="font-bold text-lg text-slate-800">{{item.name}}</h3>
@@ -348,6 +354,18 @@
                 const pdfViewer = ref({ show: false, url: '', title: '' });
                 const weather = ref({ loading: true, temp: 0, feelsLike: 0, icon: 'sun', desc: '晴朗' });
 
+                // 需要用淺綠色底色標示的雪場
+                const greenResorts = [
+                    '夏油高原滑雪場',
+                    'Onikoube雪場',
+                    '黑伏高原滑雪公園',
+                    '藏王eboshi',
+                    '天元台高原滑雪場',
+                    '星野貓魔與盤梯山 可能殺去豬苗代夜滑',
+                    'Grandeco'
+                ];
+
+
                 const flightInfo = {
                     dep: { type: 'flight', label: '去程航班 01/23', from: 'TPE', to: 'SDJ', flightNo: 'BR118', depTime: '10:15', arrTime: '14:25', duration: '3h 15m' },
                     ret: { type: 'flight', label: '回程航班 02/15', from: 'HND', to: 'HKG', flightNo: 'NH859', depTime: '08:50', arrTime: '12:55', duration: '5h 05m' }
@@ -423,7 +441,7 @@
                     nextTick(() => lucide.createIcons());
                 });
 
-                return { currentTab, selectedDayIndex, scheduleData, currentDay, openNav, openPdfViewer, resortsWithPdf, weather, pdfViewer };
+                return { currentTab, selectedDayIndex, scheduleData, currentDay, openNav, openPdfViewer, resortsWithPdf, weather, pdfViewer, greenResorts };
             }
         }).mount('#app');
     </script>
